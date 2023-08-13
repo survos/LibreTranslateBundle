@@ -43,6 +43,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
             ->children()
             ->scalarNode('host')->defaultValue('http://127.0.0.1')->end()
             ->scalarNode('port')->defaultValue('5000')->end()
+            ->scalarNode('apikey')->defaultValue(null)->end()
             ->arrayNode('entities')
             ->scalarPrototype()
             ->end()->end()
