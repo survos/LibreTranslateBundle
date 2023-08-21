@@ -82,3 +82,16 @@ Run the symfony server to see the results:
 symfony server:start
 ```
 
+# Generating code classes
+
+Install java 11 or higher
+
+Get CLI jar:
+```bash
+wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/6.6.0/openapi-generator-cli-6.6.0.jar -O openapi-generator-cli.jar
+```
+
+Run command to generate classes:
+```bash
+java -jar openapi-generator-cli.jar generate -i libretranslate.json -g php -o ~/projects/survos/test-libre-gen/
+```
