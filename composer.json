@@ -18,7 +18,7 @@
     "autoload": {
         "psr-4": {
             "Survos\\LibreTranslateBundle\\": "src/",
-            "Surovs\\LibreTranslateBundle\\": "test/"
+            "Surovs\\LibreTranslateBundle\\Tests\\": "tests/"
         }
     },
     "require-dev": {

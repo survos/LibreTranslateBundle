@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-
 class SurvosLibreTranslateBundle extends AbstractBundle
 {
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
@@ -21,9 +20,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
                 ->setAutowired(true)
                 ->setPublic(true);
 
-
-
-$serviceId = 'survos_libretranslate.libretranslate__service';
+        $serviceId = 'survos_libretranslate.libretranslate__service';
         $container->services()->alias(LibreTranslate::class, $serviceId);
         $definition = $builder->autowire($serviceId, LibreTranslate::class)
             ->setPublic(true);
