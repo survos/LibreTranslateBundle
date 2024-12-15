@@ -278,7 +278,7 @@ class FrontendSettings implements ModelInterface, ArrayAccess, \JsonSerializable
      * @param mixed[] $data Associated array of property values
      *                      initializing the model
      */
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         $this->setIfExists('api_keys', $data ?? [], null);
         $this->setIfExists('char_limit', $data ?? [], null);
