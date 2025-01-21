@@ -5,6 +5,7 @@ namespace Survos\LibreTranslateBundle;
 
 use Jefs42\LibreTranslate;
 use Survos\LibreTranslateBundle\Api\FrontendApi;
+use Survos\LibreTranslateBundle\Service\TranslationClientService;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14,11 +15,17 @@ class SurvosLibreTranslateBundle extends AbstractBundle
 {
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+
+        $builder->register(TranslationClientService::class)
+            ->setAutoconfigured(true)
+            ->setAutowired(true)
+            ->setPublic(true);
+
         // $builder->setParameter('survos_workflow.direction', $config['direction']);
 
-                $builder->register(FrontendApi::class)
-                ->setAutowired(true)
-                ->setPublic(true);
+        $builder->register(FrontendApi::class)
+            ->setAutowired(true)
+            ->setPublic(true);
 
         $serviceId = 'survos_libretranslate.libretranslate__service';
         $container->services()->alias(LibreTranslate::class, $serviceId);
