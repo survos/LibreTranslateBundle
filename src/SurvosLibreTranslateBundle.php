@@ -29,8 +29,8 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         if ($apiKey = $config['apikey']) {
             $definition->addMethodCall('setApiKey', [$apiKey]);
         }
-        if ($source = $config['apikey']) {
-            $definition->addMethodCall('setSource', [$apiKey]);
+        if ($source = $config['sourceLanguage']) {
+            $definition->addMethodCall('setSource', [$source]);
         }
 
         // twig classes
