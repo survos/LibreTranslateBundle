@@ -2,6 +2,7 @@
 
 namespace Survos\LibreTranslateBundle\Service;
 
+use Survos\LibreTranslateBundle\Dto\TranslationPayload;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -9,17 +10,43 @@ class TranslationClientService
 {
     public function __construct(
         private HttpClientInterface $httpClient,
+        private string $translationServer = 'https://translation-server.survos.com'
     )
     {
 
     }
 
-    public function requestTranslations(string $from, string $to, array $text): array
+    public static function calcHash(string $string, string $locale): string
     {
-        $url = sprintf('https://trans.wip/queue-translation/%s/%s', 'libre', $from);
-        $url .= '?' . http_build_query(['text' => $text, 'to' => [$to]]);
-        $response = $this->httpClient->request('GET', $url, [
-            'json' => $text,
+        return hash('xxh3', $string . $locale);
+    }
+
+    public static function textToCodes(array $text, string $locale): array
+    {
+        return array_map(fn($string) => self::calcHash($string, $locale), $text);
+    }
+    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false): array
+    {
+
+
+        // for debugging...
+            $debugUrl = $this->translationServer . '/get-translations?keys=' . join(',', self::textToCodes($text, $from));
+        if ($fetchOnly) {
+//            dd($debugUrl);
+        }
+//        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
+
+        $route = $fetchOnly ? '/fetch-translation' : '/queue-translation';
+        $url = $this->translationServer . $route;
+//        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
+        $payload = new TranslationPayload(
+            from: $from,
+            engine: 'libre',
+            to: $to,
+            text: $text
+        );
+        $response = $this->httpClient->request('POST', $url, [
+            'json' => $payload,
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
@@ -32,11 +59,11 @@ class TranslationClientService
                 'status' => $response->getStatusCode(),
                 'msg' => $response->getContent(false),
             ];
-//            dd($response->getStatusCode(), $response);
+            dd($response->getStatusCode(), $debugUrl);
         } else {
             $results = $response->toArray();
         }
         return $results;
     }
-
+    
 }

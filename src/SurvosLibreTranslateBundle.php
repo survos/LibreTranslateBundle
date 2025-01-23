@@ -19,7 +19,9 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         $builder->register(TranslationClientService::class)
             ->setAutoconfigured(true)
             ->setAutowired(true)
-            ->setPublic(true);
+            ->setPublic(true)
+            ->setArgument('$translationServer', $config['server'])
+        ;
 
         // $builder->setParameter('survos_workflow.direction', $config['direction']);
 
@@ -58,6 +60,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
     {
         $definition->rootNode()
             ->children()
+            ->scalarNode('server')->defaultValue('http://translation-server.survos.com')->end()
             ->scalarNode('host')->defaultValue('http://127.0.0.1')->end()
             ->scalarNode('port')->defaultValue('5000')->end()
             ->scalarNode('apikey')->defaultValue(null)->end()
