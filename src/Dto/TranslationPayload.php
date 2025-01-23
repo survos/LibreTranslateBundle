@@ -8,9 +8,9 @@ class TranslationPayload
     public const ENGINES = ['libre','bing','piglatin'];
 
     public function __construct(
-        #[Assert\Locale(canonicalize: true)]
+//        #[Assert\Locale(canonicalize: true)]
         public string $from,
-        #[Assert\Choice(choices: self::ENGINES, message: 'Choose a valid engine.')]
+//        #[Assert\Choice(choices: self::ENGINES, message: 'Choose a valid engine.')]
         public string $engine,
         #[Assert\NotBlank()]
         public array $to = [],

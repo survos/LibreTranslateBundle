@@ -45,6 +45,7 @@ class TranslationClientService
             to: $to,
             text: $text
         );
+
         $response = $this->httpClient->request('POST', $url, [
             'json' => $payload,
             'headers' => [
@@ -59,11 +60,11 @@ class TranslationClientService
                 'status' => $response->getStatusCode(),
                 'msg' => $response->getContent(false),
             ];
-            dd($response->getStatusCode(), $debugUrl);
+            dump($response->getStatusCode(), $debugUrl);
         } else {
             $results = $response->toArray();
         }
         return $results;
     }
-    
+
 }
