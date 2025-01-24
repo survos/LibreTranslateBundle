@@ -193,7 +193,7 @@ class LibreTranslateService
     @string $target Target language (optional, will use default/current target language)
     Returns: string or array
     */
-    public function translate(array|string $text, ?string $source = null, ?string $target = null) {
+    public function translate(array|string $text, ?string $source = null, ?string $target = null): null|string|array {
         // TODO: if source or target passed, validate against known available languages
         $isMulti = false; // check if text passed is single or array
 //        https://github.com/LibreTranslate/LibreTranslate?tab=readme-ov-file#can-i-do-batch-translations
@@ -238,7 +238,7 @@ class LibreTranslateService
             }
         }
 
-        if ($translatedText) {
+        if ($translatedText??null) {
             $pattern = '/(\.|\?\!)$/';
             // apply hacks...
             if (preg_match($pattern, $translatedText, $mm)) {
