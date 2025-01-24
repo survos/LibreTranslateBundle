@@ -38,8 +38,9 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         if ($apiKey = $config['apikey']) {
             $definition->addMethodCall('setApiKey', [$apiKey]);
         }
+        // ?? expensive because it calls the /languages API
         if ($source = $config['sourceLanguage']) {
-            $definition->addMethodCall('setSource', [$source]);
+//            $definition->addMethodCall('setSource', [$source]);
         }
 
         // twig classes
