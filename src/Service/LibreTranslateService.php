@@ -198,6 +198,7 @@ class LibreTranslateService
     public function translate(array|string $text, ?string $source = null, ?string $target = null): null|string|array {
         // TODO: if source or target passed, validate against known available languages
         $isMulti = false; // check if text passed is single or array
+        $translatedText = null;
 //        https://github.com/LibreTranslate/LibreTranslate?tab=readme-ov-file#can-i-do-batch-translations
         if (is_array($text)) {
             $isMulti = true;
@@ -241,7 +242,7 @@ class LibreTranslateService
             }
         }
 
-        if ($translatedText??null) {
+        if (!is_null($translatedText)) {
             $pattern = '/(\.|\?\!)$/';
             // apply hacks...
             if (preg_match($pattern, $translatedText, $mm)) {
@@ -420,6 +421,9 @@ class LibreTranslateService
         $responseInfo = curl_getinfo($ch);
         if (curl_errno($ch) != 0) {
             throw new \Exception(curl_error($ch), curl_errno($ch));
+        }
+        if ($response) {
+            $this->logger->info($response);
         }
 
         return json_decode($response);
