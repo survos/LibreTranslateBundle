@@ -3,8 +3,8 @@
 
 namespace Survos\LibreTranslateBundle;
 
-use Jefs42\LibreTranslate;
 use Survos\LibreTranslateBundle\Api\FrontendApi;
+use Survos\LibreTranslateBundle\Service\LibreTranslateService;
 use Survos\LibreTranslateBundle\Service\TranslationClientService;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,25 +23,15 @@ class SurvosLibreTranslateBundle extends AbstractBundle
             ->setArgument('$translationServer', $config['server'])
         ;
 
-        // $builder->setParameter('survos_workflow.direction', $config['direction']);
-
         $builder->register(FrontendApi::class)
             ->setAutowired(true)
             ->setPublic(true);
 
-        $serviceId = 'survos_libretranslate.libretranslate__service';
-        $container->services()->alias(LibreTranslate::class, $serviceId);
-        $definition = $builder->autowire($serviceId, LibreTranslate::class)
+        $definition = $builder->autowire(LibreTranslateService::class)
             ->setPublic(true);
         $definition->setArgument('$host', $config['host']);
+        $definition->setArgument('$apiKey', $config['apikey']);
         $definition->setArgument('$port', $config['port']);
-        if ($apiKey = $config['apikey']) {
-            $definition->addMethodCall('setApiKey', [$apiKey]);
-        }
-        // ?? expensive because it calls the /languages API
-        if ($source = $config['sourceLanguage']) {
-//            $definition->addMethodCall('setSource', [$source]);
-        }
 
         // twig classes
 
@@ -62,11 +52,12 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         $definition->rootNode()
             ->children()
             ->scalarNode('server')->defaultValue('http://translation-server.survos.com')->end()
+
             ->scalarNode('host')->defaultValue('http://127.0.0.1')->end()
             ->scalarNode('port')->defaultValue('5000')->end()
-            ->scalarNode('apikey')->defaultValue(null)->end()
-            ->scalarNode('sourceLanguage')->defaultValue(null)->end()
-            ->scalarNode('targetLanguage')->defaultValue(null)->end()
+            ->scalarNode('apikey')->info("the libretranslate API Key")->defaultValue(null)->end()
+//            ->scalarNode('sourceLanguage')->defaultValue(null)->end()
+//            ->scalarNode('targetLanguage')->defaultValue(null)->end()
             ->booleanNode('canManage')->defaultTrue()->end()
 //            ->integerNode('min_sunshine')->defaultValue(3)->end()
             ->end();

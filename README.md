@@ -1,6 +1,6 @@
 # LibreTranslateBundle
 
-A light-weight wrapper around jefs42/libretranslate 
+A bundle based on jefs42/libretranslate 
 
 # Setup
 
