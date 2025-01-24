@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Survos\LibreTranslateBundle\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -46,6 +47,7 @@ class LibreTranslateService
         private  $port = 5000,
         private ?string $source = null,
         private ?string $target = null,
+        private ?LoggerInterface $logger = null,
         private ?HttpClientInterface $httpClient = null,
     )
     {
@@ -225,6 +227,7 @@ class LibreTranslateService
 //                    dd(invalidJson: $translatedText);
 //                }
                 if (!json_validate($decoded)) {
+                    $this->logger?->error("Invalid json: " . $decoded);
 //                    dd(decoded: $decoded, tt: $translatedText, orig: $text);
                 }
 //                dd($response, $data, $translatedText, json_decode($translatedText, true));
@@ -405,6 +408,7 @@ class LibreTranslateService
 //        die($response->getStatusCode());
 //        dd($endpoint, $data, $type);
         $this->lastError = '';
+        $this->logger?->info("Request to $finalEndpoint: " . json_encode($data, JSON_PRETTY_PRINT));
         $ch = \curl_init($finalEndpoint);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
