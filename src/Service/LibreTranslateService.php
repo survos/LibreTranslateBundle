@@ -238,12 +238,14 @@ class LibreTranslateService
             }
         }
 
-        $pattern = '/(\.|\?\!)$/';
-        // apply hacks...
-        if (preg_match($pattern, $translatedText, $mm)) {
-            $last = $mm[1];
-            if (!u($text)->endsWith($last)) {
-                $translatedText = trim($translatedText, $last);
+        if ($translatedText) {
+            $pattern = '/(\.|\?\!)$/';
+            // apply hacks...
+            if (preg_match($pattern, $translatedText, $mm)) {
+                $last = $mm[1];
+                if (!u($text)->endsWith($last)) {
+                    $translatedText = trim($translatedText, $last);
+                }
             }
         }
         return $translatedText;
