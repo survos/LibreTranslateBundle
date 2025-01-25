@@ -2,6 +2,7 @@
 
 namespace Survos\LibreTranslateBundle\Service;
 
+use Psr\Log\LoggerInterface;
 use Survos\LibreTranslateBundle\Dto\TranslationPayload;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -10,6 +11,7 @@ class TranslationClientService
 {
     public const ROUTE='/batch-translate';
     public function __construct(
+        private LoggerInterface $logger,
         private HttpClientInterface $httpClient,
         private string $translationServer = 'https://translation-server.survos.com'
     )
@@ -28,17 +30,7 @@ class TranslationClientService
     }
     public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false): array
     {
-
-
-        // for debugging...
-            $debugUrl = $this->translationServer . '/get-translations?keys=' . join(',', self::textToCodes($text, $from));
-        if ($fetchOnly) {
-//            dd($debugUrl);
-        }
-//        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
-
         $url = $this->translationServer . self::ROUTE;
-//        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
         $payload = new TranslationPayload(
             from: $from,
             engine: 'libre',
@@ -57,6 +49,7 @@ class TranslationClientService
 
         ]);
         if ($response->getStatusCode() !== 200) {
+            $this->logger->error(json_encode($payload, JSON_PRETTY_PRINT));
             $results = [
                 'status' => $response->getStatusCode(),
                 'msg' => $response->getContent(false),
