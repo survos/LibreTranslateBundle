@@ -59,6 +59,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
 //            ->scalarNode('sourceLanguage')->defaultValue(null)->end()
 //            ->scalarNode('targetLanguage')->defaultValue(null)->end()
             ->booleanNode('canManage')->defaultTrue()->end()
+            ->booleanNode('enableBing')->defaultFalse()->info("if translation is identical, try bing")->end()
 //            ->integerNode('min_sunshine')->defaultValue(3)->end()
             ->end();
     }

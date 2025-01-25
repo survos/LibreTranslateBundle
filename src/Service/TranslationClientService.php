@@ -8,6 +8,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TranslationClientService
 {
+    public const ROUTE='/batch-translate';
     public function __construct(
         private HttpClientInterface $httpClient,
         private string $translationServer = 'https://translation-server.survos.com'
@@ -36,12 +37,13 @@ class TranslationClientService
         }
 //        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
 
-        $route = $fetchOnly ? '/fetch-translation' : '/queue-translation';
+        $route = '/queue-translation';
         $url = $this->translationServer . $route;
 //        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
         $payload = new TranslationPayload(
             from: $from,
             engine: 'libre',
+            insertNewStrings: !$fetchOnly,
             to: $to,
             text: $text
         );
@@ -60,7 +62,6 @@ class TranslationClientService
                 'status' => $response->getStatusCode(),
                 'msg' => $response->getContent(false),
             ];
-            dump($response->getStatusCode(), $debugUrl);
         } else {
             $results = $response->toArray();
         }

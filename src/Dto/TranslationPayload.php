@@ -10,12 +10,14 @@ class TranslationPayload
     public function __construct(
 //        #[Assert\Locale(canonicalize: true)]
         public string $from,
-//        #[Assert\Choice(choices: self::ENGINES, message: 'Choose a valid engine.')]
+        #[Assert\Choice(choices: self::ENGINES, message: 'Choose a valid engine.')]
         public string $engine,
         #[Assert\NotBlank()]
         public array $to = [],
         #[Assert\NotBlank()]
         public array $text = [],
+        public bool $forceDispatch = false, // dispatch translation requests even if marked as done
+        public bool $insertNewStrings = false,   // add new strings, otherwise simply lookup.
         public ?string $callbackUrl = null,
     ) {
     }
