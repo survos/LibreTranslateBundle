@@ -37,8 +37,7 @@ class TranslationClientService
         }
 //        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
 
-        $route = '/queue-translation';
-        $url = $this->translationServer . $route;
+        $url = $this->translationServer . self::ROUTE;
 //        $url .= '?' . http_build_query(['to' => is_string($to) ? [$to]: $to, 'text' => $text]);
         $payload = new TranslationPayload(
             from: $from,
