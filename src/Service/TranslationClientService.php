@@ -22,7 +22,7 @@ class TranslationClientService
     public static function calcHash(string $string, string $locale): string
     {
         assert(strlen($locale)===2, "Invalid Locale: $locale");
-        $str = $locale . hash('xxh3', $string);
+        $str = substr_replace(hash('xxh3', $string), strtoupper($locale), 3, 0); // insert locale into 3rd position
 //        dd(hexdec($str), $str, strlen($str)); // 255^8 = a 19-digit number
         return $str;
     }
@@ -52,6 +52,7 @@ class TranslationClientService
             'proxy' => '127.0.0.1:7080',
 
         ]);
+        // @todo: check that server is running.
         if ($response->getStatusCode() !== 200) {
             $this->logger->error(json_encode($payload, JSON_PRETTY_PRINT));
             $results = [
