@@ -21,20 +21,24 @@ class TranslationClientService
 
     public static function calcHash(string $string, string $locale): string
     {
-        return hash('xxh3', $string . $locale);
+        assert(strlen($locale)===2, "Invalid Locale: $locale");
+        $str = $locale . hash('xxh3', $string);
+//        dd(hexdec($str), $str, strlen($str)); // 255^8 = a 19-digit number
+        return $str;
     }
 
     public static function textToCodes(array $text, string $locale): array
     {
         return array_map(fn($string) => self::calcHash($string, $locale), $text);
     }
-    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false): array
+    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false, bool $forceDispatch=false): array
     {
         $url = $this->translationServer . self::ROUTE;
         $payload = new TranslationPayload(
             from: $from,
             engine: 'libre',
             insertNewStrings: !$fetchOnly,
+            forceDispatch: $forceDispatch,
             to: $to,
             text: $text
         );
