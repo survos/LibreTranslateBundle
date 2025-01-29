@@ -49,7 +49,7 @@ class TranslationClientService
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ],
-            'proxy' => '127.0.0.1:7080',
+//            'proxy' => '127.0.0.1:7080',
 
         ]);
         // @todo: check that server is running.
