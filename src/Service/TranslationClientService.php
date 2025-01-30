@@ -4,6 +4,7 @@ namespace Survos\LibreTranslateBundle\Service;
 
 use Psr\Log\LoggerInterface;
 use Survos\LibreTranslateBundle\Dto\TranslationPayload;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -13,7 +14,8 @@ class TranslationClientService
     public function __construct(
         private LoggerInterface $logger,
         private HttpClientInterface $httpClient,
-        private string $translationServer = 'https://translation-server.survos.com'
+        private string $translationServer = 'https://translation-server.survos.com',
+        #[Autowire('%env(PROXY)%')] private ?string $proxy=null,
     )
     {
 
@@ -49,7 +51,7 @@ class TranslationClientService
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ],
-//            'proxy' => '127.0.0.1:7080',
+            'proxy' => $this->proxy,
 
         ]);
         // @todo: check that server is running.
