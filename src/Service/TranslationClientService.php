@@ -29,6 +29,12 @@ class TranslationClientService
         return $str;
     }
 
+    public function getTranslationServer(): string
+    {
+        return $this->translationServer;
+    }
+
+
     public static function textToCodes(array $text, string $locale): array
     {
         return array_map(fn($string) => self::calcHash($string, $locale), $text);

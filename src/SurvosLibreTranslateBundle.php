@@ -21,6 +21,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
             ->setAutowired(true)
             ->setPublic(true)
             ->setArgument('$translationServer', $config['server'])
+//            ->setArgument('$proxy', $config['proxy'])
         ;
 
         $builder->register(FrontendApi::class)
