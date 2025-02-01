@@ -16,6 +16,7 @@ class TranslationPayload
         public array $to = [],
         #[Assert\NotBlank()]
         public array $text = [],
+        public string $transport='async',
         public bool $forceDispatch = false, // dispatch translation requests even if marked as done
         public bool $insertNewStrings = false,   // add new strings, otherwise simply lookup.
         public ?string $callbackUrl = null,

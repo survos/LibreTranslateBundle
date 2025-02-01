@@ -39,7 +39,10 @@ class TranslationClientService
     {
         return array_map(fn($string) => self::calcHash($string, $locale), $text);
     }
-    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false, bool $forceDispatch=false): array
+    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false, 
+                                        bool $forceDispatch=false, 
+                                        ?string $transport=null
+    ): array
     {
         $url = $this->translationServer . self::ROUTE;
         $payload = new TranslationPayload(
@@ -48,7 +51,9 @@ class TranslationClientService
             insertNewStrings: !$fetchOnly,
             forceDispatch: $forceDispatch,
             to: $to,
-            text: $text
+            text: $text,
+            transport: $transport,
+
         );
 
         $response = $this->httpClient->request('POST', $url, [
