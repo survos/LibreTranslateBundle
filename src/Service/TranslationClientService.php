@@ -39,8 +39,21 @@ class TranslationClientService
     {
         return array_map(fn($string) => self::calcHash($string, $locale), $text);
     }
-    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false, 
-                                        bool $forceDispatch=false, 
+
+    public function getSource($hash): array
+    {
+        return $this->httpClient->request('GET', $this->translationServer . '/source' . '/' . $hash . '.json', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'proxy' => $this->proxy,
+
+        ])->toArray();
+
+    }
+    public function requestTranslations(string $from, string|array $to, array $text, $fetchOnly=false,
+                                        bool $forceDispatch=false,
                                         ?string $transport=null
     ): array
     {
