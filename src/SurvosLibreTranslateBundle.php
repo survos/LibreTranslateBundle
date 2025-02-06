@@ -4,6 +4,7 @@
 namespace Survos\LibreTranslateBundle;
 
 use Survos\LibreTranslateBundle\Api\FrontendApi;
+use Survos\LibreTranslateBundle\Command\IterateCommand;
 use Survos\LibreTranslateBundle\Service\LibreTranslateService;
 use Survos\LibreTranslateBundle\Service\TranslationClientService;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -20,8 +21,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
             ->setAutoconfigured(true)
             ->setAutowired(true)
             ->setPublic(true)
-            ->setArgument('$translationServer', $config['server'])
-//            ->setArgument('$proxy', $config['proxy'])
+            ->setArgument('$translationServer', $config['server'])//            ->setArgument('$proxy', $config['proxy'])
         ;
 
         $builder->register(FrontendApi::class)
@@ -34,17 +34,14 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         $definition->setArgument('$apiKey', $config['apikey']);
         $definition->setArgument('$port', $config['port']);
 
-        // twig classes
-
-        /*
-        $definition = $builder
-        ->autowire('survos.barcode_twig', BarcodeTwigExtension::class)
-        ->addTag('twig.extension');
-
-        $definition->setArgument('$widthFactor', $config['widthFactor']);
-        $definition->setArgument('$height', $config['height']);
-        $definition->setArgument('$foregroundColor', $config['foregroundColor']);
-        */
+        foreach ([
+                     IterateCommand::class
+                 ]
+                 as $commandClass) {
+            $builder->autowire($commandClass)
+                ->setAutoconfigured(true)
+                ->addTag('console.command');
+        }
 
     }
 
@@ -53,7 +50,6 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         $definition->rootNode()
             ->children()
             ->scalarNode('server')->defaultValue('http://translation-server.survos.com')->end()
-
             ->scalarNode('host')->defaultValue('http://127.0.0.1')->end()
             ->scalarNode('port')->defaultValue('5000')->end()
             ->scalarNode('apikey')->info("the libretranslate API Key")->defaultValue(null)->end()

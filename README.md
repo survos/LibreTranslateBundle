@@ -15,6 +15,8 @@ bin/console make:controller AppController
 ```
 
 
+dokku storage:mount  /mnt/volume-1/project-data/trans/data:/app/data
+chown -R 32767:32767 /mnt/volume-1/project-data/trans
 
 Open AppController.php and add 
 
