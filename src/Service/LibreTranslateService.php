@@ -392,22 +392,6 @@ class LibreTranslateService
     public function _doRequest($endpoint, $data = [], $type = 'POST'): mixed
     {
         $finalEndpoint = $this->host . ( !is_null($this->apiPort) ? ':' . $this->apiPort : '' ) . $endpoint;
-//        ($type==='POST') && dump($data, $finalEndpoint, $type);
-//        try {
-//            $httpData = [
-//                'data' => $data,
-//            ];
-//            $response = $this->httpClient->request($type, $finalEndpoint, $httpData);
-//        } catch (\Exception $e) {
-//            die($e->getMessage());
-//            throw new \Exception($e->getMessage());
-//        }
-//        if ($response->getStatusCode() !== 200) {
-//            throw new \Exception("Couldn't send request to " . $finalEndpoint . ".");
-//        }
-//        return $response->toArray();
-//        die($response->getStatusCode());
-//        dd($endpoint, $data, $type);
         $this->lastError = '';
         $this->logger?->info("Request to $finalEndpoint: " . json_encode($data, JSON_PRETTY_PRINT));
         $ch = \curl_init($finalEndpoint);

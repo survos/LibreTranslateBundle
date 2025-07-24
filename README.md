@@ -97,3 +97,7 @@ Run command to generate classes:
 ```bash
 java -jar openapi-generator-cli.jar generate -i libretranslate.json -g php -o ~/projects/survos/test-libre-gen/
 ```
+
+## Database
+
+![Database Diagram](assets/db.svg)
