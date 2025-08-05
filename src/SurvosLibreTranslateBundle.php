@@ -35,7 +35,7 @@ class SurvosLibreTranslateBundle extends AbstractBundle
         $definition->setArgument('$port', $config['port']);
 
         foreach ([
-                     IterateCommand::class
+//                     IterateCommand::class
                  ]
                  as $commandClass) {
             $builder->autowire($commandClass)
