@@ -6,6 +6,7 @@ namespace Survos\LibreTranslateBundle\Service;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -195,6 +196,7 @@ class LibreTranslateService
     @string $target Target language (optional, will use default/current target language)
     Returns: string or array
     */
+    #[Cache("1 day")]
     public function translate(array|string $text, ?string $source = null, ?string $target = null): null|string|array {
         // TODO: if source or target passed, validate against known available languages
         $isMulti = false; // check if text passed is single or array
